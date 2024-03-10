@@ -1,21 +1,21 @@
-package minimum_window_substring;
+package io.goji.leetcode.minimum_window_substring;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Solution {
     public String minWindow(String s, String t) {
+        Map<Character, Integer> tMap = new HashMap<>();
+        for (char c : t.toCharArray()) {
+            tMap.put(c, tMap.getOrDefault(c, 0) + 1);
+        }
+
+        Map<Character, Integer> sMap = new HashMap<>();
         int left = 0;
         int right = 0;
         int minLen = Integer.MAX_VALUE;
         int minLeft = 0;
         int minRight = 0;
-        Map<Character, Integer> sMap = new HashMap<>();
-        Map<Character, Integer> tMap = new HashMap<>();
-        for (char c : t.toCharArray()) {
-            tMap.put(c, tMap.getOrDefault(c, 0) + 1);
-        }
         while (right < s.length()) {
             sMap.put(s.charAt(right), sMap.getOrDefault(s.charAt(right), 0) + 1);
             while (contains(sMap, tMap)) {
@@ -30,7 +30,6 @@ public class Solution {
             right++;
         }
         return minLen == Integer.MAX_VALUE ? "" : s.substring(minLeft, minRight + 1);
-        ///TODO: Implement the solution
     }
 
 
