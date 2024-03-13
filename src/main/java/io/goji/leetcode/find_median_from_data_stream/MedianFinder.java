@@ -5,23 +5,33 @@ import java.util.PriorityQueue;
 
 class MedianFinder {
 
-    PriorityQueue<Integer> pq;
+    PriorityQueue<Integer> leftPq;
+    PriorityQueue<Integer> rightPq;
 
     public MedianFinder() {
-        pq = new PriorityQueue<>();
+        leftPq = new PriorityQueue<>((a, b) -> b - a);
+        rightPq = new PriorityQueue<>((a, b) -> a - b);
     }
 
     public void addNum(int num) {
-        pq.add(num);
+        if (leftPq.isEmpty() || num <= leftPq.peek()) {
+            leftPq.add(num);
+        } else {
+            rightPq.add(num);
+        }
+
+        if (leftPq.size() > rightPq.size() + 1) {
+            rightPq.add(leftPq.poll());
+        } else if (rightPq.size() > leftPq.size()) {
+            leftPq.add(rightPq.poll());
+        }
     }
 
     public double findMedian() {
-        int[] sorted = pq.stream().mapToInt(Integer::intValue).toArray(); ///TODO: This is not efficient
-        int n = sorted.length;
-        if (n % 2 == 0) {
-            return (sorted[n / 2 - 1] + sorted[n / 2]) / 2.0;
+        if (leftPq.size() == rightPq.size()) {
+            return (leftPq.peek() + rightPq.peek()) / 2.0;
         } else {
-            return sorted[n / 2];
+            return leftPq.peek();
         }
     }
 }
