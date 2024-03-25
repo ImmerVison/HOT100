@@ -1,44 +1,49 @@
 package io.goji.leetcode.next_permutation;
 
 public class Solution {
+
+
     public void nextPermutation(int[] nums) {
-        ///TODO
-        if(nums.length == 1) return;
-        int minIdx = nums.length - 1, secondMinIdx = nums.length - 2;
-        if(nums[secondMinIdx] < nums[minIdx]) {
-            int temp = nums[secondMinIdx];
-            nums[secondMinIdx] = nums[minIdx];
-            nums[minIdx] = temp;
-            return;
+        int i = nums.length - 2;
+        // find the first decreasing element
+        while (i >= 0 && nums[i + 1] <= nums[i]) {
+            i--;
         }
-        while (secondMinIdx >= 0) {
-            if (nums[secondMinIdx] < nums[minIdx]) {
-                int temp = nums[secondMinIdx];
-                nums[secondMinIdx] = nums[minIdx];
-                nums[minIdx] = temp;
-                quickSort(nums, secondMinIdx + 1, nums.length - 1);
-                return;
+
+        // find the first element that is greater than nums[i], starting from the end, and swap them
+        if (i >= 0) {
+            int j = nums.length - 1;
+            while (j >= 0 && nums[j] <= nums[i]) {
+                j--;
             }
-            secondMinIdx--;
-            if(secondMinIdx == -1) minIdx = minIdx - 1;
+
+            // swap nums[i] and nums[j]
+            swap(nums, i, j);
         }
-        quickSort(nums, 0, nums.length - 1);
+
+        // reverse the array from i + 1 to the end
+        reverse(nums, i + 1);
+
 
     }
 
-    void quickSort(int[] nums, int l, int r) {
-        if (l >= r) return;
-        int p = nums[l + (r - l >> 1)], i = l - 1, j = r + 1;
-        while (i < j) {
-            do ++i; while (nums[i] < p);
-            do --j; while (nums[j] > p);
-            if (i < j) {
-                int t = nums[i];
-                nums[i] = nums[j];
-                nums[j] = t;
-            }
-        }
-        quickSort(nums, l, j);
-        quickSort(nums, j + 1, r);
+    public void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
+
+
+
+    // reverse the array from start to the end, inclusive
+    public void reverse(int[] nums, int start) {
+        int end = nums.length - 1;
+        while (start < end) {
+            swap(nums, start, end);
+            start++;
+            end--;
+        }
+    }
+
+
 }

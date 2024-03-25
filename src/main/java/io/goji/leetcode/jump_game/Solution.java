@@ -3,15 +3,17 @@ package io.goji.leetcode.jump_game;
 public class Solution {
 
     public boolean canJump(int[] nums) {
-        ///TODO: Implement the solution
-        int nextIdx = 0;
-        while (nextIdx < nums.length - 1) {
-            if (nums[nextIdx] == 0) {
-                return false;
+        boolean[] dp = new boolean[nums.length];
+        dp[0] = true;
+        for(int i = 1; i < nums.length; i++) {
+            for(int j = 0; j < i; j++) {
+                if(dp[j] && j + nums[j] >= i) {
+                    dp[i] = true;
+                    break;
+                }
             }
-            nextIdx += nums[nextIdx];
         }
-        return nextIdx >= nums.length - 1;
+        return dp[nums.length - 1];
 
     }
 }
